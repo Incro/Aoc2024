@@ -40,7 +40,6 @@ func isValid(array: [Int]) -> Bool {
       last = item
     } else {
       last = item
-      continue
     }
   }
   return isValid
@@ -62,3 +61,38 @@ struct Line {
     }
 }
 
+
+
+/// Part Two 
+
+
+print("---- Part 2 ----")
+
+func validationResults(array: [Int]) -> [Bool] {
+  var last: Int?
+  var validationList: [Bool] = []
+  for item in array {
+    let result = validate(current: item, previous: last)
+    last = item
+    validationList.append(result)
+}
+print("Validations for array \(array) is \(validationList) contains \(validationList.filter({$0 == false}).count) invalid numbers")
+return validationList
+}
+
+func validate(current: Int, previous: Int?) -> Bool {
+    guard let previous else {
+        return true
+    }
+    if previous > current {
+        return false 
+    }
+    if current - previous < 1 || current - previous > 3 {
+        return false 
+    }
+    return true
+}
+
+struct UnsafeLine {
+
+}
