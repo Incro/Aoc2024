@@ -76,7 +76,7 @@ func validationResults(array: [Int]) -> [Bool] {
     last = item
     validationList.append(result)
 }
-print("Validations for array \(array) is \(validationList) contains \(validationList.filter({$0 == false}).count) invalid numbers")
+// print("Validations for array \(array) is \(validationList) contains \(validationList.filter({$0 == false}).count) invalid numbers")
 return validationList
 }
 
@@ -93,6 +93,70 @@ func validate(current: Int, previous: Int?) -> Bool {
     return true
 }
 
-struct UnsafeLine {
 
+
+let ls = orderedLines.map({
+    let ls = LineState($0)
+    print("\(ls) \n")
+    return ls
+})
+
+print("Valid lines: \(ls.filter({$0.lineValid == true}).count)")
+
+struct LineState {
+    var line: [LineValue]
+    var lineValid: Bool
+
+    func countInvalid() -> Int {
+        return line.filter ({  
+          $0.valid == false
+        }).count
+    }
+
+    func checkAllWithTolerance() -> Bool {
+        var canBeMadeValid = false
+        for (index, item) in line.enumerated() {
+            var check = line
+            check.remove(at: index)
+            let newState = LineState(check.map({$0.value}))
+            if newState.lineValid {
+                canBeMadeValid = true
+            }
+        }
+        return canBeMadeValid
+    }
+
+    init(_ array: [Int]){
+        let validations = validationResults(array: array)
+        var line: [LineValue] = []
+        for (item, state) in zip(array, validations) {
+           line.append( LineValue(value: item, valid: state))
+        }
+        self.line = line
+
+        if validations.contains(false) {
+        lineValid = false 
+        } else {
+         lineValid = true
+        }
+    }
 }
+
+
+struct LineValue {
+    let value: Int 
+    var valid: Bool
+}
+
+
+let onlyInvalid = ls.filter({$0.lineValid == false })
+print("Invalid: \(onlyInvalid.count)")
+
+var canBeMadeValid: [LineState] = []
+for invalid in onlyInvalid {
+    if invalid.checkAllWithTolerance() {
+        canBeMadeValid.append(invalid)
+    }
+}
+
+print("Can be made valid: \(canBeMadeValid.count)")
