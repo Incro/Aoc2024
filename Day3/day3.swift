@@ -13,14 +13,8 @@ struct Tokenizer {
 
     func tokenize(_ input: String) {
         let chars: [Character] = Array(input)
-        print(chars)
+        let maxIndex = chars.endIndex - 1
         var tokens: [Token] = []
-
-        var processed: [Character] = []
-        var currentToken: [Character] = []
-
-        let curr = chars[1..<3]
-        print(curr)
         
 
     }
