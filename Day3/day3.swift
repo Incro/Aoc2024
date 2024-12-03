@@ -16,6 +16,14 @@ struct Tokenizer {
         let maxIndex = chars.endIndex - 1
         var tokens: [Token] = []
         
+        for e in chars {
+            if let num = Int("\(e)") {
+                tokens.append(Token.number(num))
+            } else {
+                tokens.append(Token.any("\(e)"))
+            }
+        }
+        print(tokens)
 
     }
 }
