@@ -1,4 +1,5 @@
 import Foundation
+import RegexBuilder
 
 let file = "input.txt"
 let dir = URL(filePath: FileManager.default.currentDirectoryPath)
@@ -6,37 +7,37 @@ let input = try String(contentsOf: dir.appending(path: file), encoding: .utf8)
 
 print("Day 3 Part 1")
 
-// print("Input  \(input)")
 
-
-struct Tokenizer {
-
-    func tokenize(_ input: String) {
-        let chars: [Character] = Array(input)
-        let maxIndex = chars.endIndex - 1
-        var tokens: [Token] = []
-        
-        for e in chars {
-            if let num = Int("\(e)") {
-                tokens.append(Token.number(num))
-            } else {
-                tokens.append(Token.any("\(e)"))
+let searchMul = Regex {
+            "mul("
+            Capture {
+                OneOrMore(.digit)
             }
+            ","
+            Capture {
+                OneOrMore(.digit)
+            }
+            ")"
+            
         }
-        print(tokens)
 
-    }
+
+let matches = input.matches(of: searchMul)
+print(matches.count)
+var result: Int = 0
+for match in matches {
+    print("Full \(match.0), first number \(match.1) second number \(match.2)")
+    let multiplied = Int(match.1)! * Int(match.2)!  
+    result += multiplied
 }
 
-let tokenizer = Tokenizer()
-
-tokenizer.tokenize(input)
+print(result)
 
 
-enum Token {
-    case any(String)
-    case number(Int)
-    case mul
-    case bracketOpen
-    case bracketClosed
+
+
+extension String {
+    subscript(idx: Int) -> String {
+        String(self[index(startIndex, offsetBy: idx)])
+    }
 }
